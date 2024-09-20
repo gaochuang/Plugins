@@ -1,22 +1,20 @@
 CXX = g++
 CXXFLAGS = -Wall -Wextra -pthread -O2 -fPIC -std=c++17
 
+PREFIX ?= /usr/local
+LIBDIR = $(PREFIX)/libexec
+
 LIBNAME = libcommonpidaemon
 
-INCLUDES = -Iinclude/ -I../include/ -I../commonapicontrollableprocess/include
+INCLUDES = -I/usr/local/include/comapi -Iinclude
 
 SRCS = src/Plugin.cpp
 
 OBJS = $(SRCS:.cpp=.o)
 
-STATIC_LIB = $(LIBNAME).a
 SHARED_LIB = $(LIBNAME).so
 
-all: $(STATIC_LIB) $(SHARED_LIB)
-
-$(STATIC_LIB): $(OBJS)
-	@echo "Creating static library $@"
-	ar rcs $@ $(OBJS)
+all: $(SHARED_LIB)
 
 $(SHARED_LIB): $(OBJS)
 	@echo "Creating shared library $@"
@@ -26,8 +24,14 @@ src/%.o: src/%.cpp
 	@echo "Compiling $< into $@"
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
 
+install: all
+	install -m 0755 $(SHARED_LIB) $(LIBDIR)
+
+uninstall:
+	rm -f $(LIBDIR)/$(SHARED_LIB)
+
 clean:
 	@echo "Cleaning up"
-	rm -f $(OBJS) $(STATIC_LIB) $(SHARED_LIB)
+	rm -f $(OBJS) $(SHARED_LIB)
 
 .PHONY: all clean

@@ -1,10 +1,10 @@
 #include "Plugin.hpp"
 
-#include "plugin/callbackQueueService.hpp"
-#include "plugin/fdMonitor.hpp"
-#include "plugin/defines.hpp"
-#include "plugin/signalMonitorService.hpp"
-#include "comapi/controllableProcess/controllableProcessPlugin.hpp"
+#include "plugin/CallbackQueueService.hpp"
+#include "plugin/FdMonitor.hpp"
+#include "plugin/Defines.hpp"
+#include "plugin/SignalMonitorService.hpp"
+#include "controllableProcess/ControllableProcessPlugin.hpp"
 
 #include <csignal>
 #include <cstdlib>
@@ -33,7 +33,7 @@ namespace
     }
 }
 
-Plugin::Plugin(std::shared_ptr<reactorFramework::PluginServices> pluginServices):
+Plugin::Plugin(std::shared_ptr<commonApi::PluginServices> pluginServices):
         pluginServices(pluginServices),
         fdMonitor(pluginServices->getFdMonitor()),
         signalMonitor(pluginServices->getSignalMonitor()),
