@@ -18,9 +18,13 @@ public:
     ~Plugin();
 
     void setTerminateCb(const TerminateCb& cb) override;
+    void notifyReady() override;
+    void setHeartbeatCb(const HeartbeatCb& cb) override;
+    void heartbeatAck() override;
 private:
     void handleSigTerm();
     void callTerminateCb();
+    void eventHandler();
 
     enum class SignalState
     {

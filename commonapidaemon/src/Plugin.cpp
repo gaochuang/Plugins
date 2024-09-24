@@ -40,7 +40,8 @@ Plugin::Plugin(std::shared_ptr<commonApi::PluginServices> pluginServices):
         callbackQueue(pluginServices->getEventCallbackQueue()),
         signalState(SignalState::NONE)
 {
-
+   //fdMonitor.addFD(fd, genapi::FDMonitor::EVENT_IN, std::bind(&Plugin::eventHandler, this));  这里可以将fd加入 engine
+    signalMonitor.add(SIGTERM, std::bind(&Plugin::handleSigTerm, this));
     signalMonitor.add(SIGTERM, std::bind(&Plugin::handleSigTerm, this));
     std::call_once(once, unblockSigTermAtFork);
 }
@@ -71,15 +72,31 @@ void Plugin::setTerminateCb(const TerminateCb& cb)
     );
 }
 
+void Plugin::notifyReady()
+{
+    //调用第三方的库 connection->notifyReady();
+    std::cout << "process ready " << std::endl;
+}
+
+void Plugin::setHeartbeatCb(const HeartbeatCb& cb)
+{
+    // 第三方提供  connection->setHeartbeatCb(cb);
+    std::cout << "set heart beat callback " << std::endl;
+}
+
+void Plugin::heartbeatAck()
+{
+    //第三方提供  connection->heartbeatAck();
+    std::cout << "heart beat callback " << std::endl;
+}
+
 void Plugin::handleSigTerm()
 {
     if (signalState != SignalState::NONE)
     {
         return;
     }
-
     signalState = SignalState::SIGNAL_RECEIVED;
-
     callTerminateCb();
 }
 
@@ -94,8 +111,21 @@ void Plugin::callTerminateCb()
     terminateCb();
 }
 
+void Plugin::eventHandler()
+{
+    //可以调用第三方提供的  connection->handleEvents();
+}
+
 COMMONAPI_DEFINE_CONTROLLABLEPROCESS_PLUGIN_CREATOR(services)
 {
-    std::cout << "create controllable Plugin" << std::endl;
+    //如果定义了DAEMON_PROCESS_TYPE_ENV_VAR_NAME 这个环境变量才能使用此plugin
+    const auto str = getenv("DAEMON_PROCESS_TYPE");
+    if(nullptr == str)
+    {
+        std::cout << "DAEMON_PROCESS_TYPE_ENV_VAR_NAME is not define " << std::endl;
+        return nullptr;
+    }
+    std::cout << "create controllable process use deamon Plugin" << std::endl;
+
     return std::make_shared<Plugin>(services);
 }

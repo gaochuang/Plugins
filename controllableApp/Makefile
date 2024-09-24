@@ -4,20 +4,19 @@ SRC = main.cpp
 
 CXX = g++
 
-CXXFLAGS = -Wall  -g -std=c++17
+MINISTARTER_PROCESS_TYPE_ENV_VAR_NAME = MINISTARTER_PROCESS_TYPE
 
-LIBDIR = ./
+CXXFLAGS = -Wall -g -std=c++17
 
-LIBS = -lcommonpidaemon -lractor -lcommonpicontrollableprocess
+INCLUDES = -I/usr/local/include/comapi
 
-LDFLAGS = -L$(LIBDIR)
 
-INCLUDES = -I../include/event -I../commonapicontrollableprocess/include -I../include/timer -I../include/plugin  -I../include/signalMonitor -I../include/engine -I../include 
+LIBS = /usr/local/lib64/comapi/libcommapiengine.so /usr/local/lib64/comapi/libcommonpicontrollableprocess.so /usr/local/libexec/libcommonpidaemon.so
 
 all: $(TARGET)
 
 $(TARGET): $(SRC)
-	$(CXX) $(CXXFLAGS) $(INCLUDES) $(SRC) -L$(LIBDIR) $(LIBS) -o $(TARGET)
+	$(CXX) $(CXXFLAGS) $(INCLUDES) $(SRC) $(LIBS) -o $(TARGET)
 
 clean:
 	rm -f $(TARGET)
