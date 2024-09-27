@@ -14,7 +14,7 @@ class Plugin : public std::enable_shared_from_this<Plugin>,
                public commonApi::controllableprocess::ControllableProcess
 {
 public:
-    Plugin(std::shared_ptr<commonApi::PluginServices>);
+    Plugin(std::shared_ptr<commonApi::PluginServices> pluginServices);
     ~Plugin();
 
     void setTerminateCb(const TerminateCb& cb) override;
