@@ -8,7 +8,8 @@ LIBNAME = libcommonpihttpheartbeat
 
 INCLUDES = -I/usr/local/include/comapi -Iinclude
 
-SRCS = src/Plugin.cpp
+SRCS = src/HttpHeartbeatPlugin.cpp \
+       src/SocketAddress.cpp
 
 OBJS = $(SRCS:.cpp=.o)
 

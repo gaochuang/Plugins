@@ -18,10 +18,15 @@ public:
     static SocketAddress createIPv6(const std::string& address, const std::string& service);
     static SocketAddress create(const std::string& str);
 
-    struct sockaddr* getAddress() noexcept {return &sa.s;}
-    const struct sockaddr* getAddress() const noexcept {return &sa.s;}
+    [[nodiscard]] struct sockaddr* getAddress() noexcept {return &sa.s;}
+    [[nodiscard]] const struct sockaddr* getAddress() const noexcept {return &sa.s;}
 
-    socklen_t getSize() const noexcept {return size;}
+    [[nodiscard]] socklen_t getSize() const noexcept {return size;}
+
+    [[nodiscard]] socklen_t* getSizePointer() noexcept;
+
+    bool operator==(const SocketAddress& other) const noexcept;
+    bool operator!=(const SocketAddress& other) const noexcept;
 
 private:
     union SA

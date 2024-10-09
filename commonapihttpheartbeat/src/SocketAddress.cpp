@@ -27,6 +27,7 @@ size_t addrMemCopy(const void* src, size_t srcSize, void* dst,  size_t dstSize) 
 socklen_t getAddressInfo(int family, const std::string& node, const std::string& service, struct sockaddr* sa)
 {
     const struct addrinfo info = {0, family};
+
     struct addrinfo* result = nullptr;
 
     int ret = getaddrinfo(node.c_str(), service.c_str(), &info, &result);
@@ -116,4 +117,20 @@ SocketAddress SocketAddress::create(const std::string& str)
 
     oss << "invalid address: " << str << std::endl; 
     throw oss.str();
+}
+
+socklen_t* SocketAddress::getSizePointer() noexcept
+{
+    size = sizeof(sa);
+    return &size;
+}
+
+bool SocketAddress::operator==(const SocketAddress& other) const noexcept
+{
+    return ((size == other.size) && (memcmp(&sa, &other.sa, size) == 0));
+}
+
+bool SocketAddress::operator!=(const SocketAddress& other) const noexcept
+{
+    return ((size != other.size) && (memcmp(&sa, &other.sa, size) != 0));
 }
