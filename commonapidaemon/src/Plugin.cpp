@@ -59,6 +59,7 @@ void Plugin::setTerminateCb(const TerminateCb& cb)
     {
         return;
     }
+
     std::weak_ptr<Plugin> weak(shared_from_this());
 
     callbackQueue.post(

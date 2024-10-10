@@ -7,6 +7,7 @@
 #include <arpa/inet.h>
 #include <ostream>
 #include <sstream>
+#include <iostream>
 
 using namespace commapihttpheartbeat;
 
@@ -27,7 +28,6 @@ size_t addrMemCopy(const void* src, size_t srcSize, void* dst,  size_t dstSize) 
 socklen_t getAddressInfo(int family, const std::string& node, const std::string& service, struct sockaddr* sa)
 {
     const struct addrinfo info = {0, family};
-
     struct addrinfo* result = nullptr;
 
     int ret = getaddrinfo(node.c_str(), service.c_str(), &info, &result);

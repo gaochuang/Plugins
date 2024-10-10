@@ -11,12 +11,14 @@ int main()
     auto api = ComAPI::create();
     std::cout << "this is test " <<std::endl;
 
+    bool runFlag(true);
+
     //使用commonapi daemon 的Plugin
     setenv("DAEMON_PROCESS_TYPE", "daemon", 1);
 
     auto controllableProcess = controllableprocess::ControllableProcess::create(api);
     controllableProcess->notifyReady();
-    controllableProcess->setTerminateCb(
+    controllableProcess->setHeartbeatCb(
         [&controllableProcess]()
         {
             controllableProcess->heartbeatAck();
@@ -24,13 +26,14 @@ int main()
     );
 
     controllableProcess->setTerminateCb(
-        []()
+        [&runFlag]()
         {
             std::cout << "clean resource" << std::endl;
+            runFlag = false;
         }
     );
 
-    while(true)
+    while(runFlag)
     {
         api->waitAndHandleEvents();
     }

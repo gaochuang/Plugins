@@ -107,7 +107,6 @@ namespace
     std::string expandVariables(const std::string& str)
     {
         std::ostringstream os;
-
         for(auto i = str.begin(); i != str.end(); i++)
         {
             if(*i == '%')
@@ -124,6 +123,9 @@ namespace
                 {
                     os << *i;
                 }
+            }else
+            {
+                os << *i;
             }
         }
 
@@ -192,6 +194,8 @@ void HttpHeartbeatPlugin::Client::eventHandler()
 {
     char request[1024];
     ssize_t ssize = ::recv(fd, request, sizeof(request), 0);
+
+    std::cout << "-- recv --" << ssize << std::endl;
     if(-1 == ssize)
     {
         close();
@@ -268,13 +272,14 @@ void HttpHeartbeatPlugin::notifyReady()
 {
     if(!notifyReadyCalled)
     {
-       if(-1 == ::listen(fd, 0))
+       if(-1 == ::listen(fd, 10))
        {
             std::ostringstream oss;
             oss << "listen failed " << std::strerror(errno) << std::endl;
             throw oss;
        }
 
+       std::cout << "add fd " << fd << "event loop " << std::endl;
        fdMonitor.addFd(fd, commonApi::FdMonitor::EVENT_IN, std::bind(&HttpHeartbeatPlugin::eventHandler, this));
     }
 
@@ -341,20 +346,18 @@ void HttpHeartbeatPlugin::handleSigTerm()
     }
 
     signalState = SignalState::SIGNAL_RECEIVED;
-
     callTerminateCb();
 }
 
 
 void HttpHeartbeatPlugin::callTerminateCb()
 {
-    if(nullptr != terminalCb)
+    if(nullptr == terminalCb)
     {
         return;
     }
-
     signalState = SignalState::SIGNAL_HANDLED;
-    TerminateCb();
+    terminalCb();
 }
 
 void HttpHeartbeatPlugin::removeClient(ClientNum index)
