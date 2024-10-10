@@ -195,7 +195,6 @@ void HttpHeartbeatPlugin::Client::eventHandler()
     char request[1024];
     ssize_t ssize = ::recv(fd, request, sizeof(request), 0);
 
-    std::cout << "-- recv --" << ssize << std::endl;
     if(-1 == ssize)
     {
         close();
@@ -279,7 +278,6 @@ void HttpHeartbeatPlugin::notifyReady()
             throw oss;
        }
 
-       std::cout << "add fd " << fd << "event loop " << std::endl;
        fdMonitor.addFd(fd, commonApi::FdMonitor::EVENT_IN, std::bind(&HttpHeartbeatPlugin::eventHandler, this));
     }
 
