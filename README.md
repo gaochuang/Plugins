@@ -1,7 +1,12 @@
-# Plugins
+# Plugins 运行时插件
 
-## commonapidaemon
-1. commonapi controllable process API function realization
+插件位置请参考下图:
+
+![架构图](./doc/pluginsOview.png)
+
+## commonapicontrollableprocess 插件
+
+![架构图](./doc/commonapicontrollableprocessPlugins.drawio.png)
 
 
 
