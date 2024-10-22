@@ -10,7 +10,7 @@ inline bool isValidPriority(int priority)
 {
     //LOG_PRIMASK = 0x07 用于提取日志的优先级部分/
     //LOG_FACMASK = 0x03f8 用于提取日志的来源部分
-    return (priority & (LOG_PRIMASK | LOG_FACMASK)) == 0;
+    return (priority & ~(LOG_PRIMASK | LOG_FACMASK)) == 0;
 }
 
 std::string createMessage( const std::string& ident,
