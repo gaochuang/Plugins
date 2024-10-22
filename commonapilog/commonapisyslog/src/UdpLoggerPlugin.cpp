@@ -40,7 +40,7 @@ namespace
 
     size_t noBlockSend(int fd, const void* buf, size_t len) noexcept
     {
-        ::send(fd, buf, len, MSG_NOSIGNAL | MSG_DONTWAIT);
+        return ::send(fd, buf, len, MSG_NOSIGNAL | MSG_DONTWAIT);
     }
 }
 
@@ -79,7 +79,6 @@ void UDPLoggerPlugin::write(int priority, const char* msg, size_t size)
         return;
     }
     waitAllWriteAndCompleted();
-
     trySend(true, createMessage(ident, pid, facility, priority, msg, size));
 }
 
@@ -259,7 +258,7 @@ void UDPLoggerPlugin::timerCb()
 
     if(sendMsgFromQue(false))
     {
-
+        stopMonitor();
     }else
     {
         armTimer();

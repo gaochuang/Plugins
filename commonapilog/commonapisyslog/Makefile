@@ -4,7 +4,7 @@ CXXFLAGS = -Wall -Wextra -pthread -O2 -fPIC -std=c++17
 PREFIX ?= /usr/local
 LIBDIR = $(PREFIX)/libexec
 
-LIBNAME = libcommonapidaemon
+LIBNAME = libcommonapisyslog
 
 INCLUDES = -I/usr/local/include/comapi -Iinclude
 
