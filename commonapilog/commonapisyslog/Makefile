@@ -8,9 +8,10 @@ LIBNAME = libcommonapisyslog
 
 INCLUDES = -I/usr/local/include/comapi -Iinclude
 
-SRCS = src/UdpLoggerPlugin.cpp    \
-       src/LoggerPluginCreator.cpp \
-	   src/Message.cpp
+SRCS = src/UdpLoggerPlugin.cpp      \
+       src/Message.cpp              \
+       src/LoggerPluginCreator.cpp  \
+	   src/TcpLoggerPlugin.cpp
 
 OBJS = $(SRCS:.cpp=.o)
 
