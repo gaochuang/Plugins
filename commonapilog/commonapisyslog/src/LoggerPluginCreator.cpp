@@ -1,6 +1,7 @@
 #include <logger/Logger.hpp>
 #include <logger/LoggerPlugin.hpp>
 #include "UdpLoggerPlugin.hpp"
+#include "TcpLoggerPlugin.hpp"
 
 #include <string>
 #include <iostream>
@@ -48,8 +49,12 @@ COMMONAPI_DEFINE_LOGGER_PLUGIN_CREATOR(services, params)
 
     if(fd < 0)
     {
-        std::cerr << "unable connect to " << path << std::endl;
-        return nullptr;
+        fd = TCPLoggerPlugin::createTCPLogSocket(path);
+        if(fd < 0)
+        {
+            std::cerr << "unable connect to " << path << std::endl;
+            return nullptr;
+        }
     }
 
     const auto size = getLogQueueLimit();
