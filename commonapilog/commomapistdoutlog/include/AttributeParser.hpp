@@ -80,13 +80,14 @@ namespace commonapistdoutlogger
                 {
                     return it.second;
                 }
-                if(extraEvaluator)
-                {
-                    return extraEvaluator(token);
-                }else
-                {
-                    return std::nullopt;
-                }
+            }
+
+            if(extraEvaluator)
+            {
+                return extraEvaluator(token);
+            }else
+            {
+                return std::nullopt;
             }
         }
 
@@ -111,17 +112,6 @@ namespace commonapistdoutlogger
             return removeDuplicates(sortValues(defaultValues));
         }
 
-        std::vector<T> getValue() const
-        {
-            if(!valuesParsed)
-            {
-                return getDefaultSet();
-            }
-
-            return parsedValues;
-        }
-
-        
         bool parse(const std::string& input, std::ostream& errors) override
         {
             auto tokens = extractNameAndTokens(input, "|");
@@ -155,7 +145,7 @@ namespace commonapistdoutlogger
                     }
 
                     auto begin = getValue(range.front());
-                    auto end = getValue(range.end());
+                    auto end = getValue(range.back());
                     if((begin) && (end))
                     {
                         if(nameExists(range.front()) && nameExists(range.back()))
@@ -197,7 +187,6 @@ namespace commonapistdoutlogger
 
                 }
             }
-            
             parsedValues = removeDuplicates(sortValues(parsedValues));
             return true;
         }
@@ -209,7 +198,6 @@ namespace commonapistdoutlogger
 
             return parsedValues;
         }
-
     private:
         std::vector<T>& sortValues(std::vector<T>& values) const
         {

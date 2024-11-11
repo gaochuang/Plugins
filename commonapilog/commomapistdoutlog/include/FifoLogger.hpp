@@ -6,7 +6,6 @@
 
 namespace commonapistdoutlogger
 {
-    
     class FifoLogger : public LogWriter
     {
     public:

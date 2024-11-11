@@ -9,7 +9,7 @@
 namespace commonapistdoutlogger
 {
 
-std::sting getLogHostname()
+std::string getLogHostname()
 {
     std::ostringstream os;
 
@@ -26,6 +26,13 @@ std::sting getLogHostname()
     return os.str();
 }
 
+bool isEquals(const std::string& a, const std::string& b)
+{
+    return (a.size() == b.size()) &&  std::equal(a.begin(), a.end(), b.begin(), b.end(),
+        [](char aChar, char bChar){
+        return std::tolower(aChar) == std::tolower(bChar);
+    });
+}
 
 std::string getLogFqd()
 {
