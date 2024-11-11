@@ -66,10 +66,8 @@ namespace commonapistdoutlogger
             COMMON_API_STDOUT_LOGGER_ABORT("signalIsMember: pointer is nullptr");
         }
 
-        if(-1 == ::sigismember(t, no))
-        {
-            COMMON_API_STDOUT_LOGGER_ABORT("sigismember: %s", strerror(errno));
-        }
+        return 1 == ::sigismember(t, no);
+
     }
 
     inline void signalPending(sigset_t* t)

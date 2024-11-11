@@ -129,7 +129,7 @@ namespace
     {
         struct stat sb;
 
-        return (0 == ::fstat(fd, &sb)) && (S_ISREG(sb.st_mode)) || (S_ISCHR(sb.st_mode));
+        return (0 == ::fstat(fd, &sb)) && (S_ISREG(sb.st_mode) || S_ISCHR(sb.st_mode));
     }
 
     std::unique_ptr<MessageFormatter> getMessageFormatter()

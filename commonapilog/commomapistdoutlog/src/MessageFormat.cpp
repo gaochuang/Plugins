@@ -11,15 +11,6 @@ using namespace commonapistdoutlogger;
 
 namespace
 {
-    int toFacility(int facility) noexcept
-    {
-        auto ret = facility & LOG_FACMASK; //提前facility相关number
-        if(!ret)
-        {
-            return LOG_USER;
-        }
-        return ret;
-    }
 
     bool endsWithNewLine(const char* message, size_t size) noexcept
     {
@@ -112,7 +103,7 @@ MessageFormatter::~MessageFormatter()
 {
 }
 
-std::string MessageFormatter::formatPrefix(int priority, int facility, const std::string& ident, pid_t pid, const struct timeval& t, const struct tm& tm)
+std::string MessageFormatter::formatPrefix(int priority, const std::string& ident, pid_t pid, const struct timeval& t, const struct tm& tm)
 {
     std::ostringstream preformattedPrefix;
 
@@ -170,7 +161,7 @@ std::string MessageFormatter::createMessage(const std::string& ident, pid_t pid,
     struct tm tm = {};
     ::localtime_r(&t.tv_sec, &tm);
 
-    std::string preformattedPrefix = formatPrefix(priority, facility, ident, pid, t, tm);
+    std::string preformattedPrefix = formatPrefix(priority, ident, pid, t, tm);
 
     char prefix[256] = {};
     

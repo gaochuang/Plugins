@@ -3,6 +3,7 @@
 
 #include "NullLogger.hpp"
 #include "MessageRouter.hpp"
+#include "MessageFormat.hpp"
 
 using namespace commonapistdoutlogger;
 
@@ -22,13 +23,16 @@ namespace
 
     bool isIncludedFacility(const Configuration& configuration, int facility) noexcept
     {
-        return ((facility == LOG_KERN) || (std::find(configuration.includeFacilities.cbegin(), configuration.includeFacilities.cend()) != configuration.includeFacilities.end()))
+
+        return ((facility == LOG_KERN) || (std::find(configuration.includeFacilities.cbegin(),
+                configuration.includeFacilities.cend(),
+                facility) != configuration.includeFacilities.cend()));
     }
 
     MessageRouter::MessageTargets createMessageTargetArray(const Configuration& configuration, bool onlySTDOUT = false) noexcept
     {
         MessageRouter::MessageTargets targets{};
-        for(auto i = 0; i < targets.size(); i++)
+        for(size_t i = 0; i < targets.size(); i++)
         {
             const int level = LOG_PRI(i);
             const int facility = (i & LOG_FACMASK);
@@ -75,7 +79,7 @@ MessageRouter::MessageRouter(std::unique_ptr<MessageFormatter> messageFormatter,
                     messageTargets(createMessageTargetArray(configuration, ONLY_STDOUT)),
                     messageFormatter(std::move(messageFormatter)),
                     ident(ident),
-                    defaultFacility(validateFacility(facility)),
+                    defaultFacility(checkFacility(facility)),
                     pid(pid),
                     configuration(std::move(configuration)),
                     stdoutLogger(std::move(logger)),
@@ -92,7 +96,8 @@ MessageRouter::MessageRouter(std::unique_ptr<MessageFormatter> messageFormatter,
                    std::unique_ptr<LogWriter> stderrLogger):
                    messageTargets(createMessageTargetArray(configuration, ONLY_STDOUT)),
                    messageFormatter(std::move(messageFormatter)),
-                   defaultFacility(validateFacility(facility)),
+                   ident(ident),
+                   defaultFacility(checkFacility(facility)),
                    pid(pid),
                    configuration(std::move(configuration)),
                    stdoutLogger(std::move(stdoutLogger)),
@@ -102,7 +107,7 @@ MessageRouter::MessageRouter(std::unique_ptr<MessageFormatter> messageFormatter,
 
 }
 
-MessageTarget MessageRouter::getMessageTarget(int priority) const noexcept
+MessageRouter::MessageTarget MessageRouter::getMessageTarget(int priority) const noexcept
 {
     if(isBadFacility(priority) || priority < 0 || static_cast<size_t>(priority) >= messageTargets.size())
     {
@@ -148,7 +153,7 @@ void MessageRouter::writeAsync(int priority, const char* message, size_t size)
     {
     case MessageTarget::DROPPED:
         break;
-    case MessageTarget::STDERR;
+    case MessageTarget::STDERR:
         stderrLogger->writeAsync(createMessage(priority, message, size));
         break;
     case MessageTarget::STDOUT:

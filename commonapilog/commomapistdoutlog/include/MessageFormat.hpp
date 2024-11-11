@@ -29,7 +29,7 @@ namespace commonapistdoutlogger
     private:
         const std::string prefixFormat;
 
-        std::string formatPrefix(int priority, int facility, const std::string& ident, pid_t pid, const struct timeval& t, const struct tm& tm);
+        std::string formatPrefix(int priority, const std::string& ident, pid_t pid, const struct timeval& t, const struct tm& tm);
     };
 }
 
