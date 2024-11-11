@@ -8,6 +8,8 @@
 
 ![架构图](./doc/commonapicontrollableprocessPlugins.drawio.png)
 
+## commonapilogger 插件
 
+![架构图](./doc/commonapi.drawio.png)
 
 
