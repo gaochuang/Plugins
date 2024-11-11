@@ -17,6 +17,7 @@ SRCS = src/LoggerPluginCreator.cpp \
 	   src/Configuration.cpp \
 	   src/FileDescriptor.cpp \
 	   src/MessageRouter.cpp \
+	   src/Abort.cpp \
 	   src/Utils.cpp
 
 OBJS = $(SRCS:.cpp=.o)
