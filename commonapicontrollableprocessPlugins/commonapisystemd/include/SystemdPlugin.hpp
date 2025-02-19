@@ -36,9 +36,16 @@ private:
     commonApi::TimerService& timerService;
 
     bool notifyReadyCalled;
+    uint64_t heartbeatInterval;
     SignalState signalState;
     TerminateCb terminateCb;
     HeartbeatCb heartbeatCb;
+
+    void startupTimer();
+    void startUpHeartbeatTimerIfWatchdogEnabled();
+    void handleHeartbeatTimer();
+    void handleSigTerm();
+    void callTerminateCb();
 };
 
 }
